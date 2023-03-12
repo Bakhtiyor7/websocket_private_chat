@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Chat Client</title>
+</head>
+<body>
+  <label>Target ID:</label>
+  <input id="target" type="text">
+  <br>
+  <label>Message:</label>
+  <input id="message" type="text">
+  <br>
+  <button onclick="send()">Send</button>
+  <br>
+  <div id="output"></div>
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onmessage = (event) => {
+      document.getElementById('output').textContent += event.data + '\n';
+    };
+    function send() {
+      const target = document.getElementById('target').value;
+      const message = document.getElementById('message').value;
+      const data = { type: 'chat', target, message };
+      ws.send(JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>
